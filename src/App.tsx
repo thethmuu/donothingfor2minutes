@@ -12,7 +12,9 @@ function App() {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
-    createAudioFile().then(setAudioSrc).catch(() => setAudioError(true));
+    createAudioFile()
+      .then(setAudioSrc)
+      .catch(() => setAudioError(true));
   }, []);
 
   const resetTimer = useCallback(() => {
@@ -95,7 +97,9 @@ function App() {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, '0')}:${secs
+      .toString()
+      .padStart(2, '0')}`;
   };
 
   const toggleMute = () => {
@@ -110,58 +114,67 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-cover bg-center flex items-center justify-center" style={{backgroundImage: 'url("https://images.pexels.com/photos/3759660/pexels-photo-3759660.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")'}}>
+    <div
+      className="min-h-screen bg-cover bg-center flex items-center justify-center"
+      style={{
+        backgroundImage:
+          'url("https://images.pexels.com/photos/3759660/pexels-photo-3759660.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',
+      }}
+    >
       <div className="bg-white bg-opacity-80 p-8 rounded-lg shadow-md text-center">
         <h1 className="text-3xl font-bold mb-6">Do Nothing for 2 Minutes</h1>
         <div className="text-6xl font-mono mb-8">{formatTime(timeLeft)}</div>
-        {!isActive && !hasFailed && timeLeft === 120 && (
-          <button
-            onClick={startTimer}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-          >
-            Start
-          </button>
-        )}
-        {hasFailed && (
-          <div className="text-red-500 flex items-center justify-center mb-4">
-            <AlertCircle className="mr-2" />
-            <span>You moved! Try again.</span>
-          </div>
-        )}
-        {(hasFailed || timeLeft === 0) && (
-          <button
-            onClick={resetTimer}
-            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
-          >
-            Reset
-          </button>
-        )}
-        {isActive && (
-          <p className="text-gray-600 mt-4">Don't move your mouse or use your keyboard!</p>
-        )}
-        {timeLeft === 0 && (
-          <p className="text-green-500 font-bold mt-4">Congratulations! You did it!</p>
-        )}
-        {!audioError && audioSrc && (
-          <button
-            onClick={toggleMute}
-            className="mt-4 text-gray-500 hover:text-gray-700"
-            aria-label={isMuted ? "Unmute" : "Mute"}
-          >
-            {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
-          </button>
-        )}
+        <section className="flex items-center justify-center gap-2">
+          {!isActive && !hasFailed && timeLeft === 120 && (
+            <button
+              onClick={startTimer}
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+            >
+              Start
+            </button>
+          )}
+          {hasFailed && (
+            <div className="text-red-500 flex items-center justify-center mb-4">
+              <AlertCircle className="mr-2" />
+              <span>You moved! Try again.</span>
+            </div>
+          )}
+          {(hasFailed || timeLeft === 0) && (
+            <button
+              onClick={resetTimer}
+              className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+            >
+              Reset
+            </button>
+          )}
+          {isActive && (
+            <p className="text-gray-600 mt-4">
+              Don't move your mouse or use your keyboard!
+            </p>
+          )}
+          {timeLeft === 0 && (
+            <p className="text-green-500 font-bold mt-4">
+              Congratulations! You did it!
+            </p>
+          )}
+          {!audioError && audioSrc && (
+            <button
+              onClick={toggleMute}
+              className="text-gray-500 hover:text-gray-700"
+              aria-label={isMuted ? 'Unmute' : 'Mute'}
+            >
+              {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            </button>
+          )}
+        </section>
         {audioError && (
-          <p className="text-yellow-500 mt-4">Audio unavailable. Enjoy the silence!</p>
+          <p className="text-yellow-500 mt-4">
+            Audio unavailable. Enjoy the silence!
+          </p>
         )}
       </div>
       {audioSrc && (
-        <audio
-          ref={audioRef}
-          src={audioSrc}
-          loop
-          onError={handleAudioError}
-        />
+        <audio ref={audioRef} src={audioSrc} loop onError={handleAudioError} />
       )}
     </div>
   );
