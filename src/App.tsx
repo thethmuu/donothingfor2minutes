@@ -124,6 +124,7 @@ function App() {
       <div className="bg-white bg-opacity-80 p-8 rounded-lg shadow-md text-center">
         <h1 className="text-3xl font-bold mb-6">Do Nothing for 2 Minutes</h1>
         <div className="text-6xl font-mono mb-8">{formatTime(timeLeft)}</div>
+
         <section className="flex items-center justify-center gap-2">
           {!isActive && !hasFailed && timeLeft === 120 && (
             <button
@@ -133,12 +134,7 @@ function App() {
               Start
             </button>
           )}
-          {hasFailed && (
-            <div className="text-red-500 flex items-center justify-center mb-4">
-              <AlertCircle className="mr-2" />
-              <span>You moved! Try again.</span>
-            </div>
-          )}
+
           {(hasFailed || timeLeft === 0) && (
             <button
               onClick={resetTimer}
@@ -147,16 +143,13 @@ function App() {
               Reset
             </button>
           )}
+
           {isActive && (
             <p className="text-gray-600 mt-4">
               Don't move your mouse or use your keyboard!
             </p>
           )}
-          {timeLeft === 0 && (
-            <p className="text-green-500 font-bold mt-4">
-              Congratulations! You did it!
-            </p>
-          )}
+
           {!audioError && audioSrc && (
             <button
               onClick={toggleMute}
@@ -167,12 +160,27 @@ function App() {
             </button>
           )}
         </section>
+
+        {timeLeft === 0 && (
+          <p className="text-green-500 font-bold mt-4">
+            Congratulations! You did it!
+          </p>
+        )}
+
+        {hasFailed && (
+          <div className="text-red-500 flex items-center justify-center mb-4">
+            <AlertCircle className="mr-2" />
+            <span>You moved! Try again.</span>
+          </div>
+        )}
+
         {audioError && (
           <p className="text-yellow-500 mt-4">
             Audio unavailable. Enjoy the silence!
           </p>
         )}
       </div>
+
       {audioSrc && (
         <audio ref={audioRef} src={audioSrc} loop onError={handleAudioError} />
       )}
